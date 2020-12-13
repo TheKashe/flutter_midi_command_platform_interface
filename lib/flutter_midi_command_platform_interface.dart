@@ -4,8 +4,10 @@ import 'dart:typed_data';
 import 'package:flutter_midi_command_platform_interface/midi_device.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 import 'method_channel_midi_command.dart';
+import 'midi_data.dart';
 
 export 'package:flutter_midi_command_platform_interface/midi_device.dart';
+export 'package:flutter_midi_command_platform_interface/midi_data.dart';
 
 abstract class MidiCommandPlatform extends PlatformInterface {
   /// Constructs a MidiCommandPlatform.
@@ -68,6 +70,11 @@ abstract class MidiCommandPlatform extends PlatformInterface {
 
   Stream<Uint8List> get onMidiDataReceived {
     throw UnimplementedError('get onMidiDataReceived has not been implemented.');
+  }
+  
+  ///onMidiDataReceived which wrappes Uint8List in MidiData which includes timestamp of the data received
+  Stream<MidiData> get onMidiDataReceivedTS{
+    throw UnimplementedError('get onMidiDataReceivedTS has not been implemented.');
   }
 
   /// Stream firing events whenever a change in the MIDI setup occurs.

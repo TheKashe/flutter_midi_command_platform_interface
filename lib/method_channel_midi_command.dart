@@ -11,6 +11,7 @@ const EventChannel _setupChannel = EventChannel('plugins.invisiblewrench.com/flu
 /// An implementation of [MidiCommandPlatform] that uses method channels.
 class MethodChannelMidiCommand extends MidiCommandPlatform {
   Stream<Uint8List> _rxStream;
+  Stream<MidiData> _rxStreamTS;
   Stream<String> _setupStream;
 
   /// Returns a list of found MIDI devices.
@@ -78,6 +79,19 @@ class MethodChannelMidiCommand extends MidiCommandPlatform {
       return Uint8List.fromList(List<int>.from(d));
     });
     return _rxStream;
+  }
+  
+  /// Stream firing events whenever a midi package is received.
+  ///
+  /// The event contains the wrapper MidiData, which contains timestamp and data received.
+  @override
+  Stream<MidiData> get onMidiDataReceivedTS {
+    print("get on midi data");
+    _rxStreamTS ??= _rxChannel.receiveBroadcastStream().map<MidiData>((d) {
+            //print("data $d");
+      return MidiData(d[0].first, Uint8List.fromList(List<int>.from(d[1])));
+    });
+    return _rxStreamTS;
   }
 
   /// Stream firing events whenever a change in the MIDI setup occurs.
